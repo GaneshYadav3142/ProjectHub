@@ -37,4 +37,10 @@ ProjectHub is a powerful project management application designed to streamline c
    ```sh
    git clone <repository-url>
 
-   cd ProjectHub
+ 
+
+
+2.**Navigate to the Project Directory:**
+
+   ```sh
+     cd ProjectHub

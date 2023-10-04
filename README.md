@@ -37,12 +37,49 @@ ProjectHub is a powerful project management application designed to streamline c
    ```sh
    git clone <repository-url>
 
-
 2.**Navigate to the Project Directory:**
-   ```sh 
-   cd ProjectHub  ```  
+   ```sh
+   cd ProjectHub 
+   ```
 
-
-3. **Install Dependencies:**
+3.**Install Dependencies:**
    ```sh
    npm install
+   ```
+4.**Database Setup:**
+-Create a new database for the application.
+-Update the database connection configuration in the .env file
+
+5.**Start the Application:**
+   ```sh
+   npm start
+   ```
+-The application will be running at http://localhost:3000.
+
+
+## API Documentation
+-For detailed API documentation, including endpoints, request bodies, and responses, refer to API_CONTRACTS.md.
+
+**Usage**
+-User Registration and Login:
+-Register a new user: POST /api/users/register
+-Log in an existing user: POST /api/users/login
+
+**Project and Task Management:**
+Create, view, update, and delete projects and tasks using the respective endpoints.
+
+**Team Management:**
+
+Create, update, and delete teams.
+Manage team members and assign projects.
+
+**Dashboard and Notifications:**
+
+Access the user dashboard: GET /api/dashboard
+Implement real-time or email notifications using appropriate endpoints.
+
+
+
+
+
+

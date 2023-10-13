@@ -4,6 +4,7 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-login',
@@ -14,13 +15,16 @@ export class LoginComponent implements OnDestroy {
   loginForm: FormGroup;
   private unsubscribe$ = new Subject<void>();
 
-  constructor(private fb: FormBuilder, private apiService: ApiService, private router:Router) {
+  constructor(private fb: FormBuilder, private apiService: ApiService, private router:Router,private _snackBar: MatSnackBar) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required]]
     });
   }
-
+ 
+  horizontalPosition: MatSnackBarHorizontalPosition = 'center';
+  verticalPosition: MatSnackBarVerticalPosition = 'top'; 
+  durationInSeconds = 5;
   onSubmit(): void {
     if (this.loginForm.invalid) {
       return;
@@ -36,12 +40,20 @@ export class LoginComponent implements OnDestroy {
           console.log('Login successful!', response);
           console.log(response.token)
           localStorage.setItem("token",response.token)
-          alert("New user added successfully")
+          this._snackBar.open("Login Successful", "OK",{
+            horizontalPosition: this.horizontalPosition,
+            verticalPosition: this.verticalPosition,
+            duration: this.durationInSeconds * 1000,
+          });
           this.router.navigate(['/dashboard'])
         },
         error: error => {
           // Handle login error
           console.error('Login failed:', error);
+          this._snackBar.open("Login Error", "Retry",{
+            horizontalPosition: this.horizontalPosition,
+            verticalPosition: this.verticalPosition
+          });
         }
       });
   }

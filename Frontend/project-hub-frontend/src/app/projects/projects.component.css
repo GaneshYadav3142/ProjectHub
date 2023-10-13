@@ -1,0 +1,43 @@
+.demo-table {
+    width: 100%;
+  }
+  
+  .mat-mdc-row .mat-mdc-cell {
+    border-bottom: 1px solid transparent;
+    border-top: 1px solid transparent;
+    cursor: pointer;
+  }
+  
+  .mat-mdc-row:hover .mat-mdc-cell {
+    border-color: currentColor;
+  }
+  
+  .dialog-content {
+    margin: 16px;
+    padding-left: 20px; /* Adjust the margin value according to your preference */
+  }
+  
+  .mat-dialog-content.dialog-content {
+    margin: 16px;
+  
+  }
+  h1{
+    text-align: center;
+  }
+  .container {
+    display: flex;
+    margin: 10px;
+    justify-content: center;
+    align-items: center;
+  }
+  .example-full-width {
+    width: 100%;
+  }
+  .form{
+    width: 500px;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    background-color: gray;
+    padding: 10px;
+    border-radius: 12px;
+  }
+

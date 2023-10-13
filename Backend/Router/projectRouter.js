@@ -3,6 +3,19 @@ const db = require("../db")
 const authMiddleware = require("../Midddleware/AuthenticationMiddelware")
 const projectRouter=express.Router()
 
+projectRouter.get('/', authMiddleware, (req, res) => {
+    const managerID = req.body.userID;
+    
+    const getProjectsQuery = 'SELECT * FROM projects WHERE managerID = ?';
+    
+    db.query(getProjectsQuery, [managerID], (err, results) => {
+      if (err) {
+        return res.status(500).send('Internal Server Error');
+      }
+      res.json(results);
+    });
+  });
+
 projectRouter.post("/create",authMiddleware,async(req,res)=>{
        const {proName,description,srtDate,endDate}=req.body
        const managerID=req.body.userID
@@ -10,7 +23,7 @@ projectRouter.post("/create",authMiddleware,async(req,res)=>{
     try {
         db.query("SELECT role FROM users WHERE id = ?", managerID, (err, roleResult) => {
             if (err) {
-                return res.status(500).send("Internal Server Error");
+                return res.status(500).send("Internal Server Error 1");
             }
 
             const userRole = roleResult[0].role;
@@ -22,7 +35,7 @@ projectRouter.post("/create",authMiddleware,async(req,res)=>{
 
         db.query("SELECT * FROM projects WHERE proNAME = ?",proName,(err,results)=>{
             if (err) {
-                return res.status(500).send("Internal Server Error");
+                return res.status(500).send("Internal Server Error 2");
             }
             if(results.length){
                 res.status(400).send({msg:"Project  Already Exist"})
@@ -34,7 +47,7 @@ projectRouter.post("/create",authMiddleware,async(req,res)=>{
                     }else{
                         db.query("SELECT * FROM users WHERE id = ?", managerID, (err, managerResult) => {
                             if (err) {
-                                return res.status(500).send("Internal Server Error");
+                                return res.status(500).send("Internal Server Error 3");
                             }
                             const manager = managerResult[0]; // Assuming managerResult returns a single user
                             const project = {
@@ -89,9 +102,32 @@ projectRouter.get("/:projectId", authMiddleware, async (req, res) => {
                    return  res.status(500).send("Internal Server Error ");
                 }
                if(tasksResults.length===0){
-                return res.status(500).send("No Task available for this Project ");
+
+                db.query("SELECT * FROM users WHERE id = ?", managerID, (err, managerResult) => {
+                    if (err) {
+                        return res.status(500).send("Internal Server Error");
+                    }
+                    const manager = managerResult[0]
+                    const response1 = {
+                        id: project.projectID,
+                        name: project.proName,
+                        description: project.description,
+                        startDate: project.srtDate,
+                        endDate: project.endDate,
+                        manager: {
+                            id: manager.id,
+                            name: manager.name,
+                            email: manager.email,
+                            role:manager.role
+                        },
+                        tasks: []
+                    };
+                 return res.status(200).json(response1);
+                })
+               
                }
-               console.log("tasks",tasksResults)
+               //console.log("tasks",tasksResults)
+               else{
                 const tasks = await Promise.all(tasksResults.map(async task => {
                     const assignedMembersQuery = "SELECT * FROM users WHERE id IN (SELECT teamMemberID FROM task_team_members WHERE taskID = ?)";
                     const assignedMembers = await new Promise((resolve, reject) => {
@@ -139,6 +175,7 @@ projectRouter.get("/:projectId", authMiddleware, async (req, res) => {
 
                 res.status(200).json(response);
             })
+        }
             });
         });
     } catch (error) {
@@ -152,11 +189,14 @@ projectRouter.get("/:projectId", authMiddleware, async (req, res) => {
 projectRouter.patch("/:projectId", authMiddleware, async (req, res) => {
     const projectId = req.params.projectId;
     const managerID = req.body.userID; // Get managerID from authenticated user's token
-    const { name, description, startDate, endDate, managerID: newManagerID } = req.body;
-
+    const { proName, description, startDate, endDate, managerID: newManagerID } = req.body;
+     console.log(req.body)
+    const startDate1 = new Date(startDate);
+     const    endDate1 = new Date(endDate)
+         console.log(startDate1,endDate1)
     try {
-        
 
+        
         // Check if the user is the manager of the project
         const projectQuery = "SELECT * FROM projects WHERE projectID = ? AND managerID = ?";
         db.query(projectQuery, [projectId, managerID], (err, projectResults) => {
@@ -172,9 +212,9 @@ projectRouter.patch("/:projectId", authMiddleware, async (req, res) => {
             const updateFields = [];
             const updateValues = [];
 
-            if (name) {
+            if (proName) {
                 updateFields.push("proName");
-                updateValues.push(name);
+                updateValues.push(proName);
             }
 
             if (description) {
@@ -184,12 +224,12 @@ projectRouter.patch("/:projectId", authMiddleware, async (req, res) => {
 
             if (startDate) {
                 updateFields.push("srtDate");
-                updateValues.push(startDate);
+                updateValues.push(startDate1);
             }
 
             if (endDate) {
                 updateFields.push("endDate");
-                updateValues.push(endDate);
+                updateValues.push(endDate1);
             }
 
             if (newManagerID) {
@@ -248,6 +288,48 @@ projectRouter.patch("/:projectId", authMiddleware, async (req, res) => {
 
 
 
+projectRouter.delete("/:projectId", authMiddleware, async (req, res) => {
+    const projectId = req.params.projectId;
+    const managerID = req.body.userID; // Get managerID from authenticated user's token
+      console.log("manager",managerID)
+    try {
+        // Check if the user is the manager of the project
+        db.query("SELECT * FROM projects WHERE projectID = ? AND managerID = ?", [projectId, managerID], (err, projectResults) => {
+            if (err) {
+                return res.status(500).send("Internal Server Error");
+            }
+
+            if (projectResults.length === 0) {
+                return res.status(404).send("Project not found or you don't have access to delete this project.");
+            }
+
+            // Delete tasks associated with the project
+            db.query("DELETE FROM tasks WHERE projectID = ?", projectId, (err) => {
+                if (err) {
+                    return res.status(500).send("Error deleting tasks related to the project.");
+                }
+
+                // Delete team members associated with the project
+                db.query("DELETE FROM task_team_members WHERE taskID IN (SELECT taskID FROM tasks WHERE projectID = ?)", projectId, (err) => {
+                    if (err) {
+                        return res.status(500).send("Error deleting team members related to the project.");
+                    }
+
+                    // Delete the project itself
+                    db.query("DELETE FROM projects WHERE projectID = ?", projectId, (err) => {
+                        if (err) {
+                            return res.status(500).send("Error deleting the project.");
+                        }
+
+                        res.status(200).json({ message: "Project and related details deleted successfully." });
+                    });
+                });
+            });
+        });
+    } catch (error) {
+        res.status(500).send("Internal Server Error");
+    }
+});
 
 
 

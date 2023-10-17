@@ -1,1 +1,247 @@
-<p>dashboard works!</p>
+<mat-tab-group dynamicHeight *ngIf="dashboardData && dashboardData[0]">
+  <mat-tab label="Projects" >
+    <div class="dashboard-container">
+      <button *ngIf="isManager" mat-raised-button color="primary" (click)="toggleForm()">Create Project</button>
+    
+      <!-- Project Form (Visible when showForm is true) -->
+      <div *ngIf="showForm" class="form">
+        <h2>Enter Projects Feilds</h2>
+        <form [formGroup]="projectForm" class="form-contianer"> <!-- Add the formGroup directive here -->
+          <div class="form-feild">
+            <mat-form-field class="example-full-width">
+              <mat-label>Project Name</mat-label>
+              <input matInput placeholder="Enter Project Name" formControlName="proName">
+            </mat-form-field>
+          </div>
+          <div class="form-feild">
+            <mat-form-field class="example-full-width">
+              <mat-label>Description</mat-label>
+              <input matInput placeholder="Enter Project Description" formControlName="description">
+            </mat-form-field>
+          </div>
+          <div class="form-feild">
+            <mat-form-field class="example-full-width">
+              <mat-label>Start Date</mat-label>
+              <input matInput [matDatepicker]="startDatePicker" placeholder="Select Start Date" formControlName="srtDate">
+              <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
+              <mat-datepicker #startDatePicker></mat-datepicker>
+            </mat-form-field>
+          </div>
+          <div class="form-feild">
+            <mat-form-field class="example-full-width">
+              <mat-label>End Date</mat-label>
+              <input matInput [matDatepicker]="endDatePicker" placeholder="Select End Date" formControlName="endDate">
+              <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
+              <mat-datepicker #endDatePicker></mat-datepicker>
+            </mat-form-field>
+          </div>
+    
+          <button mat-raised-button color="primary" (click)="submitForm()">Submit</button>
+        </form>
+      </div>
+    </div>
+    
+    
+    
+    <!-- Display project properties, assuming project has properties like 'proName', 'description', etc. -->
+    <div class="container">
+    <div class="project-card" *ngFor="let project of dashboardData[0].projects">
+        <div class="card">
+            <div class="card-header">
+              <h2 class="title">{{ project.proName }}</h2>
+              <p class="subtitle"><strong>Manager:</strong> {{ project.managerName }}</p>
+            </div>
+            <div class="project-image">
+              <img  src="../../assets/images/project.png" alt="Task Image">
+            </div>
+            <div class="card-content">
+              <p><strong>Description:</strong> {{ project.description }}</p>
+              <p><strong>StartDate:</strong> {{ project.srtDate | date:'dd MMMM yyyy'}}</p>
+              <p><strong>EndDate:</strong> {{ project.endDate | date:'dd MMMM yyyy'}}</p>
+            </div>
+            <div class="card-footer">
+               <h2>Assigned Team: {{project.teamName===null? "No Team Assigned" : project.teamName}}</h2>
+            </div>
+          </div>
+      </div>
+    </div>
+</mat-tab>
+    <mat-tab label="Tasks">
+      <div class="dashboard-container">
+        <!-- Button to toggle the form visibility -->
+        <button *ngIf="isManager" mat-raised-button color="primary" (click)="toggleTaskForm()">Create Task</button>
+      
+        <!-- Task Form (Visible when taskFormVisible is true) -->
+        <div *ngIf="isTaskFormVisible"  class="form">
+          <h2>Enter Tasks Feilds</h2>
+          <form [formGroup]="taskForm">
+            <!-- Task Title Input -->
+            <div>
+              <mat-form-field class="example-full-width">
+                <mat-label>Task Title</mat-label>
+                <input matInput formControlName="title" placeholder="Enter Task Title">
+              </mat-form-field>
+            </div>
+      
+            <!-- Task Description Input -->
+            <div>
+              <mat-form-field class="example-full-width">
+                <mat-label>Task Description</mat-label>
+                <textarea matInput formControlName="description" placeholder="Enter Task Description"></textarea>
+              </mat-form-field>
+            </div>
+      
+            <!-- Due Date Input -->
+            <div>
+              <mat-form-field class="example-full-width">
+                <mat-label>Due Date</mat-label>
+                <input matInput [matDatepicker]="dueDatePicker" formControlName="dueDate" placeholder="Select Due Date">
+                <mat-datepicker-toggle matSuffix [for]="dueDatePicker"></mat-datepicker-toggle>
+                <mat-datepicker #dueDatePicker></mat-datepicker>
+              </mat-form-field>
+            </div>
+      
+            <!-- Priority Select -->
+            <div>
+              <mat-form-field class="example-full-width">
+                <mat-label>Priority</mat-label>
+                <mat-select formControlName="priority">
+                  <mat-option value="High">High</mat-option>
+                  <mat-option value="Medium">Medium</mat-option>
+                  <mat-option value="Low">Low</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+      
+            <!-- Status Select -->
+            <div>
+              <mat-form-field class="example-full-width">
+                <mat-label>Status</mat-label>
+                <mat-select formControlName="status">
+                  <mat-option value="In Progress">In Progress</mat-option>
+                  <mat-option value="Completed">Completed</mat-option>
+                  <mat-option value="Assigned">Assigned</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+      
+            <!-- Project Select -->
+            <div>
+              <mat-form-field class="example-full-width">
+                <mat-label>Project</mat-label>
+                <input matInput formControlName="projectID" placeholder="Enter ProjectID">
+              </mat-form-field>
+            </div>
+      
+            <!-- Assigned Members Multi-Select Dropdown -->
+            <div>
+              <mat-form-field class="example-full-width">
+                <mat-label>Assigned Members</mat-label>
+                <mat-select formControlName="assignedTeamMembers" multiple>
+                  <mat-option *ngFor="let user of users" [value]="user.id">{{ user.name }}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+      
+            <!-- Button to Submit the Form -->
+            <button mat-raised-button color="primary" (click)="createTask()">Create Task</button>
+          </form>
+        </div>
+      </div>
+      
+       <div class="container">
+
+        <!-- Display task properties, assuming task has properties like 'title', 'dueDate', etc. -->
+        <div *ngFor="let task of dashboardData[0].tasks" class="task-card">
+          <mat-progress-bar  *ngIf="task.status.toLowerCase() === 'assigned' || task.status.toLowerCase() === 'pending'"
+          mode="determinate"  matBadge="10"   matBadgePosition="after" matBadgeColor="primary" [value]="10">
+          </mat-progress-bar>
+         <mat-progress-bar  *ngIf="task.status.toLowerCase() === 'in progress'"
+         mode="determinate" matBadge="50" matBadgePosition="after" matBadgeColor="primary" value="50"></mat-progress-bar>
+         <mat-progress-bar *ngIf="task.status.toLowerCase() === 'completed'"
+       mode="determinate" matBadge="100" matBadgePosition="after" matBadgeColor="primary" value="100"> </mat-progress-bar>
+          <div class="task-header">
+            
+            <h2 class="title">{{ task.title }}</h2>
+            <p class="priority-badge" [ngStyle]="{'color': getTitleColor(task.priority)}">{{ task.priority }}</p>
+          </div>
+        
+          <div class="task-content">
+            <p><strong>DueDate:</strong> {{ task.dueDate | date:'dd MMMM yyyy' }}</p>
+            <p><strong>Description:</strong> {{ task.description }}</p>
+            <p><strong>Status:</strong> {{ task.status }}</p>
+            <!-- Additional task details can be displayed here, e.g., task.description, task.priority, etc. -->
+          </div>
+        
+          <div class="task-image">
+            <img src="../../assets/images/task.png" alt="Task Image">
+          </div>
+        
+          <div class="task-footer">
+            <p><strong>Project:</strong> {{ task.proName }}</p>
+            <p><strong>Assigned Team:</strong> {{ task.name===null? "Team Not Assigned" : task.name }}</p>
+          </div>
+        
+        </div>
+        
+      </div>
+    </mat-tab>
+    
+    <mat-tab label="Teams">
+
+      <div class="dashboard-container">
+        <!-- Button to toggle the team creation form visibility -->
+        <button *ngIf="isManager" mat-raised-button color="primary" (click)="toggleTeamForm()">Create Team</button>
+    
+        <!-- Team Creation Form (Visible when teamFormVisible is true) -->
+        <div *ngIf="isTeamFormVisible" class="form">
+          <h2>Create Team</h2>
+          <form [formGroup]="teamForm" class="form-container">
+            <!-- Team Name Input -->
+            <div class="form-field">
+              <mat-form-field class="example-full-width">
+                <mat-label>Team Name</mat-label>
+                <input matInput formControlName="name" placeholder="Enter Team Name">
+              </mat-form-field>
+            </div>
+    
+            <!-- Members Multi-Select Dropdown -->
+            <div class="form-field">
+              <mat-form-field class="example-full-width">
+                <mat-label>Members</mat-label>
+                <mat-select formControlName="members" multiple>
+                  <mat-option *ngFor="let user of users" [value]="user.id">{{ user.name }}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+    
+            <!-- Project ID Input -->
+            <div class="form-field">
+              <mat-form-field class="example-full-width">
+                <mat-label>Project ID</mat-label>
+                <input matInput formControlName="projectID" placeholder="Enter Project ID">
+              </mat-form-field>
+            </div>
+    
+            <!-- Button to Submit the Team Creation Form -->
+            <button mat-raised-button color="primary" (click)="createTeam()">Create Team</button>
+          </form>
+        </div>
+        </div>
+      <div class="container">
+      <div *ngFor="let team of dashboardData[0].teams" class="team-card">
+        <h2 class="team-header">{{ team.teamName }}</h2>
+        <div class="project-image">
+          <img  src="../../assets/images/hands.png" alt="Task Image">
+        </div>
+        <div class="team-members">
+          <h2><strong>Team Members</strong></h2>
+          <p *ngFor="let member of team.teamMembers.split(','); let last = last" class="member-name">
+            {{ member }}<span *ngIf="!last">  </span>
+          </p>
+        </div>
+      </div>
+    </div>
+    </mat-tab>
+  </mat-tab-group>
+  

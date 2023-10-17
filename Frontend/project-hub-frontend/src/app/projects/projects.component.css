@@ -1,3 +1,6 @@
+
+
+
 .demo-table {
     width: 100%;
   }
@@ -39,5 +42,9 @@
     background-color: gray;
     padding: 10px;
     border-radius: 12px;
+  }
+
+  #task-image{
+    width:200px
   }
 

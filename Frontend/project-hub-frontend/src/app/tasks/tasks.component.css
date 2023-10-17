@@ -1,0 +1,44 @@
+.demo-table {
+    width: 100%;
+  }
+  
+  .mat-mdc-row .mat-mdc-cell {
+    border-bottom: 1px solid transparent;
+    border-top: 1px solid transparent;
+    cursor: pointer;
+  }
+  
+  .mat-mdc-row:hover .mat-mdc-cell {
+    border-color: currentColor;
+  }
+
+  .custom-progress-spinner {
+    width: 30px; /* Adjust the width as needed */
+    height: 10px; /* Adjust the height as needed */
+  }
+
+  input{
+    width: 400px;
+  }
+
+  .form-container {
+    max-width: 400px;
+    margin: 0 auto;
+  }
+  
+  .example-full-width {
+    width: 100%;
+  }
+  
+  .form-field {
+    margin-bottom: 20px;
+  }
+  
+  .form{
+    width: 400px;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    background-color: gray;
+    padding: 10px;
+    border-radius: 12px;
+  }
+  

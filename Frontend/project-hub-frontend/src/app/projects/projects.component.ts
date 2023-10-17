@@ -1,6 +1,7 @@
 import { Component, OnInit,Inject } from '@angular/core';
 import { ApiService } from '../api.service';
 import { MatDialog, MAT_DIALOG_DATA ,MatDialogRef} from '@angular/material/dialog';
+import { DatePipe } from '@angular/common';
 @Component({
   selector: 'app-projects',
   templateUrl: './projects.component.html',
@@ -16,7 +17,7 @@ export class ProjectsComponent implements OnInit {
   dataSource: any[] = []
   displayedColumns: string[] = ['uniqueID','projectName','projectDescription', 'projectDetails','projectUpdate','projectDelete'];
  
-  constructor(private apiService:ApiService,private dialog: MatDialog ) { }
+  constructor(public apiService:ApiService,private dialog: MatDialog ) { }
 
   ngOnInit(): void {
     this.fetchProjects();
@@ -25,7 +26,7 @@ export class ProjectsComponent implements OnInit {
  
 
   fetchProjects(): void {
-    this.apiService.getProjects().subscribe({
+    this.apiService.fetchProjects().subscribe({
      next: response => {
         this.dataSource = response;
       },
@@ -44,7 +45,7 @@ export class ProjectsComponent implements OnInit {
         const dialogRef = this.dialog.open(ProjectDetailsDialogComponent, {
           width: '50%',
           data: response,
-          
+        
         
         });
         this.fetchProjects();
@@ -111,21 +112,19 @@ export class ProjectsComponent implements OnInit {
 @Component({
   selector: 'app-project-details-dialog',
   template: `
-    <h1 mat-dialog-title [class.dialog-content]="true" style="margin:15px;color:white;text-align:center">Project Details</h1>
-    <div mat-dialog-content style="margin:15px ;color:white">
+    <h1 mat-dialog-title [class.dialog-content]="true" style="margin:15px;text-align:center">Project Details</h1>
+    <div mat-dialog-content style="margin:15px ">
     <div style="display:flex;justify-content:space-evenly">
     <div>
        <h1>Project Overview</h1>
       <h3>Name: {{ data.name }}</h3>
       <h3>Description: {{ data.description }}</h3>
-      <h3>StartDate: {{ data.startDate }}</h3>
-      <h3>EndDate: {{ data.endDate }}</h3>
+      <h3>StartDate: {{ data.startDate  }}</h3>
+      <h3>EndDate: {{ data.endDate   }}</h3>
       
       
       </div>
       <div>
-      <h1>Project Manager</h1>
-      <h3 > {{ data.manager.name }}</h3>
       <h1>Tasks:  {{ data.tasks.length }}</h1>
     </div>
     </div>

@@ -6,7 +6,7 @@
    margin: 3% auto;
     padding: 20px;
     border: 1px solid #ccc;
-    background-color: tomato;
+    background-color:gray;
     border-radius: 10px;
     box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
   }
@@ -43,7 +43,7 @@
   button {
     width: 100%;
     padding: 10px;
-    background-color: peachpuff;
+    background-color: #ccc;
     color: black;
     font-size: 16px;
     border: none;
@@ -53,7 +53,7 @@
   }
   
   button:hover {
-    background-color:peachpuff;
+    background-color:#ccc;
   }
   
   /* Responsive Styles */

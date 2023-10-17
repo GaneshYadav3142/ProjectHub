@@ -1,1 +1,143 @@
-<p>tasks works!</p>
+
+
+<table mat-table [dataSource]="dataSource" class="mat-elevation-z8 demo-table">
+    <!-- Task ID Column -->
+    <ng-container matColumnDef="taskID">
+      <th mat-header-cell *matHeaderCellDef>Task UID</th>
+      <td mat-cell *matCellDef="let element">{{element.taskID}}</td>
+    </ng-container>
+  
+    <!-- Task Title Column -->
+    <ng-container matColumnDef="title">
+      <th mat-header-cell *matHeaderCellDef>Title</th>
+      <td mat-cell *matCellDef="let element">{{element.taskTitle}}</td>
+    </ng-container>
+  
+    <!-- Task Priority Column -->
+    <ng-container matColumnDef="priority">
+      <th mat-header-cell *matHeaderCellDef>Priority</th>
+      <td mat-cell *matCellDef="let element">{{element.priority}}</td>
+    </ng-container>
+
+    <!-- Task Status Column -->
+    <ng-container matColumnDef="status">
+      <th mat-header-cell *matHeaderCellDef>Status</th>
+      <td mat-cell *matCellDef="let element">{{element.status}}</td>
+    </ng-container>
+  
+    <!-- Update Task Column -->
+    <ng-container matColumnDef="update">
+      <th mat-header-cell *matHeaderCellDef>Update</th>
+      <td mat-cell *matCellDef="let element">
+        <button mat-raised-button color="primary"   *ngIf="apiService.isManager()" (click)="toggleUpdateFormVisibility(element.taskID)">Update</button>
+        <span *ngIf="!apiService.isManager()">N/A</span>
+      </td>
+    </ng-container>
+  
+    <!-- Delete Task Column -->
+    <ng-container matColumnDef="delete">
+      <th mat-header-cell *matHeaderCellDef>Delete</th>
+      <td mat-cell *matCellDef="let element">
+        <button mat-raised-button color="warn"  *ngIf="apiService.isManager()" (click)="deleteTask(element.taskID)">Delete</button>
+        <span *ngIf="!apiService.isManager()">N/A</span>
+      </td>
+    </ng-container>
+
+    <!-- Task Progrss column -->
+    <ng-container matColumnDef="progressSpinner">
+      <th mat-header-cell *matHeaderCellDef>Progress</th>
+     
+      <td mat-cell *matCellDef="let element">
+        <mat-progress-bar  *ngIf="element.status.toLowerCase() === 'assigned' || element.status.toLowerCase() === 'pending'"
+         mode="determinate"  matBadge="10" matBadgePosition="before" matBadgeColor="primary" [value]="10"></mat-progress-bar>
+        <mat-progress-bar  matBadge="50" matBadgePosition="before" matBadgeColor="primary" *ngIf="element.status.toLowerCase() === 'in progress'"
+        mode="determinate"  value="50"></mat-progress-bar>
+        <mat-progress-bar  matBadge="100" matBadgePosition="before" matBadgeColor="primary" *ngIf="element.status.toLowerCase() === 'completed'"
+      mode="determinate"  value="100"> </mat-progress-bar>
+      </td>
+   
+    </ng-container>
+    
+  
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+  
+
+  <!-- Update Form -->
+
+  <div *ngIf="showUpdateForm" class="form">
+    <h2>Update Task Form</h2>
+    <form [formGroup]="taskForm" >
+      <!-- Task Title Input -->
+      <div>
+        <mat-form-field class="example-full-width">
+          <mat-label>Task Title</mat-label>
+          <input matInput formControlName="title" placeholder="Enter Task Title">
+        </mat-form-field>
+      </div>
+
+      <!-- Task Description Input -->
+      <div>
+        <mat-form-field class="example-full-width">
+          <mat-label>Task Description</mat-label>
+          <textarea matInput formControlName="description" placeholder="Enter Task Description"></textarea>
+        </mat-form-field>
+      </div>
+
+      <!-- Due Date Input -->
+      <div>
+        <mat-form-field class="example-full-width">
+          <mat-label>Due Date</mat-label>
+          <input matInput [matDatepicker]="dueDatePicker" formControlName="dueDate" placeholder="Select Due Date">
+          <mat-datepicker-toggle matSuffix [for]="dueDatePicker"></mat-datepicker-toggle>
+          <mat-datepicker #dueDatePicker></mat-datepicker>
+        </mat-form-field>
+      </div>
+
+      <!-- Priority Select -->
+      <div>
+        <mat-form-field class="example-full-width">
+          <mat-label>Priority</mat-label>
+          <mat-select formControlName="priority">
+            <mat-option value="High">High</mat-option>
+            <mat-option value="Medium">Medium</mat-option>
+            <mat-option value="Low">Low</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <!-- Status Select -->
+      <div>
+        <mat-form-field class="example-full-width">
+          <mat-label>Status</mat-label>
+          <mat-select formControlName="status">
+            <mat-option value="In Progress">In Progress</mat-option>
+            <mat-option value="Completed">Completed</mat-option>
+            <mat-option value="Assigned">Assigned</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <!-- Project Select -->
+      <div>
+        <mat-form-field class="example-full-width">
+          <mat-label>Project</mat-label>
+          <input matInput formControlName="projectID" placeholder="Enter ProjectID">
+        </mat-form-field>
+      </div>
+
+      <!-- Assigned Members Multi-Select Dropdown -->
+      <div>
+        <mat-form-field class="example-full-width">
+          <mat-label>Assigned Members</mat-label>
+          <mat-select formControlName="assignedTeamMembers" multiple>
+            <mat-option *ngFor="let user of users" [value]="user.id">{{ user.name }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <!-- Button to Submit the Form -->
+      <button mat-raised-button color="primary" (click)="updateTask()">Create Task</button>
+    </form>
+  </div>

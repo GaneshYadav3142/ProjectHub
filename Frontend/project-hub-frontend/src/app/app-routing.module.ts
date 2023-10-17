@@ -7,8 +7,10 @@ import { TeamsComponent } from './teams/teams.component';
 import { LoginComponent } from './login/login.component';
 import { SignupComponent } from './signup/signup.component';
 
+
+
 const routes: Routes = [
-  { path: 'dashboard', component: DashboardComponent },
+  { path: 'dashboard', component: DashboardComponent  },
   { path: 'projects', component: ProjectsComponent },
   { path: 'tasks', component: TasksComponent },
   { path: 'teams', component: TeamsComponent },

@@ -3,6 +3,7 @@ const userRouter=express.Router()
 const bcrypt=require("bcrypt")
 const jwt=require("jsonwebtoken")
 const db=require("../db")
+const authMiddleware = require("../Midddleware/AuthenticationMiddelware")
 
 userRouter.post("/register",async(req,res)=>{
     const {name,email,password,role}=req.body
@@ -59,7 +60,7 @@ userRouter.post('/login', async(req, res) => {
             res.status(400).send("Incorrect Password")
            }
            else{
-            const token=jwt.sign({userID:results[0].id},"ProjectHub",{expiresIn:"1d"})
+            const token=jwt.sign({userID:results[0].id,role:results[0].role},"ProjectHub",{expiresIn:"1d"})
             res.status(200).send({token,success: true, message: 'Login successful.' })
            }
     
@@ -70,6 +71,31 @@ userRouter.post('/login', async(req, res) => {
     res.status(400).send({error:"error"})
    }
   });
+
+
+  userRouter.get('/', authMiddleware,async(req, res) => {
+    const managerID=req.body.userID;
+    const role=req.body.role
+
+    try {
+        if(role!=="Team member"){
+        const fetchTeamMembersQuery = 'SELECT id, name, email FROM users WHERE role = "Team member"';
+
+    db.query(fetchTeamMembersQuery, (error, results) => {
+        if (error) {
+            console.error(error);
+            res.status(500).json({ error: 'Internal Server Error' });
+        } else {
+            res.status(200).json(results);
+        }
+    });
+    }
+    
+} catch (error) {
+       res.status(400).send("Internal Server Error") 
+    }
+    
+});
 
 
 

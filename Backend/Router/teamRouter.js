@@ -3,6 +3,98 @@ const db = require('../db'); // Assuming you have a database connection module
 
 const teamRouter = express.Router();
 
+teamRouter.get("/", async (req, res) => {
+    const userID = req.body.userID;
+    const role = req.body.role;
+
+    try {
+        if (role === "Project manager") {
+            // Query to fetch team details, team members, tasks assigned to the team, and project names
+            const query = `
+            SELECT 
+            teams.id AS teamID,
+            teams.name AS teamName,
+            projects.proName AS projectName,
+            tasks.taskID,
+            tasks.title AS taskTitle,
+            tasks.description AS taskDescription,
+            tasks.dueDate,
+            tasks.priority,
+            tasks.status,
+            GROUP_CONCAT(users.name ORDER BY users.name ASC SEPARATOR ', ') AS teamMemberNames
+        FROM 
+            teams
+        LEFT JOIN 
+            projects ON teams.projectID = projects.projectID
+        LEFT JOIN 
+            tasks ON projects.projectID = tasks.projectID
+        LEFT JOIN 
+            task_team_members ON tasks.taskID = task_team_members.taskID
+        LEFT JOIN 
+            users ON task_team_members.teamMemberID = users.id
+        WHERE 
+            projects.managerID = ?  -- Replace ? with the manager's ID
+        GROUP BY 
+            teams.id, tasks.taskID
+        ORDER BY 
+            teams.id, tasks.taskID;
+         
+            `;
+
+            db.query(query, [userID], (err, results) => {
+                if (err) {
+                    console.error(err);
+                    return res.status(500).json("Internal Server Error 1");
+                }
+                console.log(results);
+                res.status(200).json(results);
+            });
+        } else {
+            const query1 = `
+            SELECT 
+            teams.id AS teamID,
+            teams.name AS teamName,
+            projects.proName AS projectName,
+            tasks.taskID,
+            tasks.title AS taskTitle,
+            tasks.description AS taskDescription,
+            tasks.dueDate,
+            tasks.priority,
+            tasks.status,
+            users.name AS teamMemberName
+        FROM 
+            teams
+        LEFT JOIN 
+            projects ON teams.projectID = projects.projectID
+        LEFT JOIN 
+            tasks ON projects.projectID = tasks.projectID
+        LEFT JOIN 
+            teammembers ON teams.id = teammembers.teamID
+        LEFT JOIN 
+            users ON teammembers.userID = users.id
+        WHERE 
+            teams.id IN (SELECT teamID FROM teammembers WHERE userID = ?);
+        
+            `;
+
+            db.query(query1, [userID], (err, results) => {
+                if (err) {
+                    console.error(err);
+                    return res.status(500).json("Internal Server Error 1");
+                }
+                console.log(results);
+                res.status(200).json(results);
+            });
+        } 
+        
+    } catch (error) {
+        console.error(error);
+        res.status(500).json("Internal Server Error 1");
+    }
+});
+
+
+
 teamRouter.post('/create', (req, res) => {
     const { name, members, projectID } = req.body;
 

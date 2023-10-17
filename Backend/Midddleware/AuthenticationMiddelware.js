@@ -8,6 +8,8 @@ if(token){
         const decode=jwt.verify(token,"ProjectHub");
         if(decode){
             req.body.userID=decode.userID;
+            req.body.role=decode.role
+            console.log( req.body.role)
             next()
         }
         else{

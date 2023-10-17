@@ -1,0 +1,239 @@
+.example-card {
+    max-width: 400px;
+    margin-bottom: 10px;
+  }
+
+ 
+  
+
+ .container{
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  grid-gap:12px;
+  margin: 25px;
+  
+ }
+ .project-card {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin-bottom: 20px;
+  background-color: #fff;
+}
+
+.project-card:hover {
+  box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.2);
+  transition: box-shadow 0.3s ease-in-out;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.card-header {
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.card-header {
+  background-color: #f5f5f5;
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.card-header h2 {
+  font-size: 1.2em;
+  color: #333;
+  margin: 0;
+}
+
+.card-header .subtitle {
+  font-size: 0.9em;
+  color: #777;
+  margin: 0;
+}
+.title {
+  font-size: 5em;
+  font-weight: bold;
+  margin: 0;
+}
+
+.subtitle {
+  font-size: 1em;
+  color: #555;
+  margin: 0;
+}
+
+.project-image img {
+  width: 50%;
+  height: 50%;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  margin-left: 85px;
+}
+
+.card-content {
+  font-size: 1em;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.card-footer {
+  background-color: #f5f5f5;
+  padding: 10px;
+  border-top: 1px solid #ccc;
+  text-align: center;
+}
+
+.card-footer h2 {
+  font-size: 1em;
+  color: #333;
+  margin: 0;
+}
+
+ 
+  
+ 
+  
+  /* task css */
+
+  .task-card {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin: 10px;
+    padding: 15px;
+    width: 300px;
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+  }
+  .task-header h2 {
+    font-size: 1.2em;
+    color: #333;
+    margin: 0;
+  }
+  .task-header {
+    background-color: #f5f5f5;
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .title {
+    font-size: 5em;
+    font-weight: bold;
+    margin: 0;
+  }
+  
+  .priority-badge {
+    font-size: 14px;
+    padding: 5px 10px;
+    border-radius: 5px;
+  }
+  
+  .task-content {
+    font-size: 14px;
+    margin-bottom: 10px;
+  }
+  
+  .task-image img {
+    width: 50%;
+    height: 50%;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    margin-left: 70px;
+  }
+  
+  .task-footer {
+    background-color: #f5f5f5;
+    padding: 10px;
+    border-top: 1px solid #ccc;
+    text-align: center;
+  }
+
+  .task-footer h2{
+    font-size: 1.2em;
+  color: #333;
+  margin: 0;
+  }
+  
+  /* Add hover effect */
+  .task-card:hover {
+    box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.2);
+    transition: box-shadow 0.3s ease-in-out;
+  }
+  
+/* team container */
+
+.team-card {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin: 10px;
+  padding: 15px;
+  width: 300px;
+  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+}
+
+.team-header {
+  background-color: #f5f5f5;
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.team-header h2 {
+  font-size: 1.2em;
+  color: #333;
+  margin: 0;
+}
+
+.member-name {
+  font-size: 14px;
+  margin: 5px 0;
+}
+
+/* Add hover effect */
+.team-card:hover {
+  box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.2);
+  transition: box-shadow 0.3s ease-in-out;
+}
+
+
+/* create form */
+
+
+.dashboard-container {
+  margin: 20px;
+}
+
+.form-container {
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.form-field {
+  margin-bottom: 20px;
+}
+
+.form{
+  width: 400px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  background-color: gray;
+  padding: 10px;
+  border-radius: 12px;
+}
+
+.example-full-width {
+  width: 100%;
+}

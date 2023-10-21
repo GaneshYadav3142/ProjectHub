@@ -79,6 +79,17 @@ export class ApiService {
   deleteTask(tasKID:number):Observable<any>{
     return this.http.delete<any>(`${this.apiUrl}/tasks/${tasKID}`,this.getHeaders())
   }
+
+  //create teams
+
+  fetchTeams():Observable<any>{
+    return this.http.get<any>(`${this.apiUrl}/teams/`,this.getHeaders())
+  }
+
+
+
+
+  
   
   private getHeaders(): { headers: HttpHeaders } {
     const token = localStorage.getItem('token'); // Get the token from localStorage

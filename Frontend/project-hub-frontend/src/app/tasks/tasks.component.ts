@@ -10,7 +10,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
   styleUrls: ['./tasks.component.css']
 })
 export class TasksComponent implements OnInit{
-  displayedColumns: string[] = ['taskID', 'title', 'priority','status', 'update', 'delete','progressSpinner'];
+  displayedColumns: string[] = ['taskID', 'title', 'priority','status', 'update', 'delete','progressBar'];
   dataSource: any[] = []
   showUpdateForm:boolean=false
   selectedtaskId:number | null = null

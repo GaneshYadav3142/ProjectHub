@@ -1,1 +1,68 @@
-<p>teams works!</p>
+
+<table mat-table [dataSource]="dataSource" class="mat-elevation-z8 demo-table">
+    <!-- Task ID Column -->
+    <ng-container matColumnDef="teamID">
+      <th mat-header-cell *matHeaderCellDef>Team UID</th>
+      <td mat-cell *matCellDef="let element">{{element.teamID}}</td>
+    </ng-container>
+  
+    <!-- Task Title Column -->
+    <ng-container matColumnDef="teamName">
+      <th mat-header-cell *matHeaderCellDef>Team Name</th>
+      <td mat-cell *matCellDef="let element">{{element.teamName}}</td>
+    </ng-container>
+  
+    <!-- Task Priority Column -->
+    <ng-container matColumnDef="projectName">
+      <th mat-header-cell *matHeaderCellDef>Project Name</th>
+      <td mat-cell *matCellDef="let element">{{element.projectName}}</td>
+    </ng-container>
+
+     <!-- Task Name Column -->
+     <ng-container matColumnDef="taskTitle">
+        <th mat-header-cell *matHeaderCellDef>Task Assigned</th>
+        <td mat-cell *matCellDef="let element">{{element.taskTitle===null ? "No Task Assigned" : element.taskTitle  }}</td>
+      </ng-container>
+
+      <!-- Task Name Column -->
+     <ng-container matColumnDef="dueDate">
+        <th mat-header-cell *matHeaderCellDef>Deadline</th>
+        <td mat-cell *matCellDef="let element">{{element.dueDate===null ? "No Deadline" : element.dueDate | date:'dd MMMM yyyy' }}</td>
+      </ng-container>
+
+    <!-- Task Status Column -->
+    <ng-container matColumnDef="status">
+      <th mat-header-cell *matHeaderCellDef>Status</th>
+      <td mat-cell *matCellDef="let element">{{element.status===null ? "No status" : element.status}}</td>
+    </ng-container>
+  
+     <!-- Team Member Column -->
+    <ng-container matColumnDef="teamMembers">
+        <th mat-header-cell *matHeaderCellDef>Team Member</th>
+        <td mat-cell *matCellDef="let element">{{element.teamMemberName===null  ? "No Team Assigned" : element.teamMemberName}}</td>
+      </ng-container>
+
+
+    <!-- Update Task Column -->
+    <ng-container matColumnDef="update">
+      <th mat-header-cell *matHeaderCellDef>Update</th>
+      <td mat-cell *matCellDef="let element">
+        <button mat-raised-button color="primary"   *ngIf="apiService.isManager()" (click)="toggleUpdateFormVisibility(element.teamID)">Update</button>
+        <span *ngIf="!apiService.isManager()">N/A</span>
+      </td>
+    </ng-container>
+  
+    <!-- Delete Task Column -->
+    <ng-container matColumnDef="delete">
+      <th mat-header-cell *matHeaderCellDef>Delete</th>
+      <td mat-cell *matCellDef="let element">
+        <button mat-raised-button color="warn"  *ngIf="apiService.isManager()" (click)="deleteTeam()">Delete</button>
+        <span *ngIf="!apiService.isManager()">N/A</span>
+      </td>
+    </ng-container>
+
+    <!-- Task Progrss column -->
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+  

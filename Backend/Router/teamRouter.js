@@ -21,7 +21,7 @@ teamRouter.get("/", async (req, res) => {
             tasks.dueDate,
             tasks.priority,
             tasks.status,
-            GROUP_CONCAT(users.name ORDER BY users.name ASC SEPARATOR ', ') AS teamMemberNames
+            GROUP_CONCAT(users.name ORDER BY users.name ASC SEPARATOR ', ') AS teamMemberName
         FROM 
             teams
         LEFT JOIN 

@@ -44,14 +44,14 @@
     </ng-container>
 
     <!-- Task Progrss column -->
-    <ng-container matColumnDef="progressSpinner">
+    <ng-container matColumnDef="progressBar">
       <th mat-header-cell *matHeaderCellDef>Progress</th>
      
       <td mat-cell *matCellDef="let element">
         <mat-progress-bar  *ngIf="element.status.toLowerCase() === 'assigned' || element.status.toLowerCase() === 'pending'"
          mode="determinate"  matBadge="10" matBadgePosition="before" matBadgeColor="primary" [value]="10"></mat-progress-bar>
-        <mat-progress-bar  matBadge="50" matBadgePosition="before" matBadgeColor="primary" *ngIf="element.status.toLowerCase() === 'in progress'"
-        mode="determinate"  value="50"></mat-progress-bar>
+        <mat-progress-bar  matBadge="30" matBadgePosition="before" matBadgeColor="primary" *ngIf="element.status.toLowerCase() === 'in progress'"
+        mode="determinate"  value="30"></mat-progress-bar>
         <mat-progress-bar  matBadge="100" matBadgePosition="before" matBadgeColor="primary" *ngIf="element.status.toLowerCase() === 'completed'"
       mode="determinate"  value="100"> </mat-progress-bar>
       </td>

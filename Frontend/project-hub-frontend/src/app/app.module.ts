@@ -32,6 +32,7 @@ import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
 import {MatBadgeModule} from '@angular/material/badge';
+import { OtpComponentComponent } from './otp-component/otp-component.component';
 
 @NgModule({
   declarations: [
@@ -42,7 +43,8 @@ import {MatBadgeModule} from '@angular/material/badge';
     TeamsComponent,
     LoginComponent,
     SignupComponent,
-    NavbarComponent
+    NavbarComponent,
+    OtpComponentComponent
   ],
   imports: [
     BrowserModule,

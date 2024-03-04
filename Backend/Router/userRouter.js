@@ -111,7 +111,7 @@ userRouter.post('/login', async(req, res) => {
             res.status(400).send("Incorrect Password")
            }
            else{
-            // const token=jwt.sign({userID:results[0].id,role:results[0].role},"ProjectHub",{expiresIn:"1d"})
+           
              const sendMail= await sendEmail(email)
             //console.log(sendOTP(email))
             res.status(200).send({success: true, message: 'OTP send successfully to your email, valif for 5 minutes' })
@@ -123,18 +123,21 @@ userRouter.post('/login', async(req, res) => {
    }
   });
 
-  userRouter.post("/email",async(req,res)=>{
+  userRouter.post("/:email",async(req,res)=>{
 
-    const {email,otp} = req.body
-   
-    //const {email}= req.params
+    const {otp} = req.body
+     const {email}= req.params
     try { 
         console.log("route hitted",email,otp)
          const isVerified = verifyOTP(email,+otp)
          console.log("verfication",isVerified)
          console.log(email,otp)
          if (isVerified) {
-            res.status(200).send({ success: true, message: "OTP verified successfully." })
+            db.query('SELECT * FROM users WHERE email = ?', email, async(err, results) => {
+                const token=jwt.sign({userID:results[0].id,role:results[0].role},"ProjectHub",{expiresIn:"1d"})
+
+                res.status(200).send({token, success: true, message: "OTP verified successfully." })
+            })
          }
          else {
                 res.status(400).send({ success: false, message: "Invalid OTP." });

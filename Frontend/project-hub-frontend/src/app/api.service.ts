@@ -87,7 +87,11 @@ export class ApiService {
   }
 
 
+//otp form
 
+verifyOTP(otp:number):Observable<any>{
+  return this.http.post<any>(`${this.apiUrl}/users/:email`,this.getHeaders())
+}
 
   
   

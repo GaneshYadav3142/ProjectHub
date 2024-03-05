@@ -37,10 +37,10 @@ export class LoginComponent implements OnDestroy {
       .subscribe({
         next: response => {
           // Handle successful login response
-          console.log('Login successful!', response);
+          console.log('OTP is send successfully to your email!', response);
           console.log(response.token)
-          localStorage.setItem("token",response.token)
-          this._snackBar.open("Login Successful", "OK",{
+          //localStorage.setItem("token",response.token)
+          this._snackBar.open("OTP is send successfully to your email!", "OK",{
             horizontalPosition: this.horizontalPosition,
             verticalPosition: this.verticalPosition,
             duration: this.durationInSeconds * 1000,
